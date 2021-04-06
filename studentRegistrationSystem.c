@@ -1,6 +1,20 @@
+/*
+==========================================
+          CO253 - GROUP PROJECT
+------------------------------------------
+E/17/370 - Wanninayake R.B.S.W.M.L.R.B
+E/17/371 - Warnakulasuriya R
+E/17/372 - Warnasooriya W.A.V.G
+E/17/374 - Weeerasekara K.A
+==========================================   
+*/
+
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+
+#define batchSize 420
+#define nameSize 69
 
 int mainMenu();
 void newRecord();
@@ -9,14 +23,14 @@ void printAll();
 void deleteRecord();
 void capitalize(char* word);
 
-int batchArray[420*4]={0};
-int regNoArray[420*4]={0};
-char* firstNameArray[420*4][69]={0};
-char* lastNameArray[420*4][69]={0};
-float gpaArray[420*4]={0};
+int batchArray[(batchSize)*4]={0};
+int regNoArray[(batchSize)*4]={0};
+char* firstNameArray[(batchSize)*4][(nameSize)]={0};
+char* lastNameArray[(batchSize)*4][(nameSize)]={0};
+float gpaArray[(batchSize)*4]={0};
 
 int main() {
-    printRecord();
+    // printRecord();
     return 0;
 }
 // generate a text-based main menu and return the selected option
@@ -28,13 +42,14 @@ int mainMenu() {
     scanf("%d",&option);
     return option;
 }
+
 // make a new student record
 void newRecord() {
-    char firstName[69];
-    char lastName[69];
+    char firstName[(nameSize)];
+    char lastName[(nameSize)];
     int i;
     // find the first empty record
-    for (i=0; i<420; i++) {
+    for (i=0; i<(batchSize); i++) {
 
         if (batchArray[i]==0){
             break;
@@ -56,6 +71,7 @@ void newRecord() {
     memcpy(firstNameArray[i], firstName, sizeof(firstNameArray[i]));
     memcpy(lastNameArray[i], lastName, sizeof(firstNameArray[i]));
 }
+
 // print the recored corresponding to a given regNo
 void printRecord() {
     char query[9];
@@ -69,6 +85,7 @@ void printRecord() {
 
     // printf("Student %s %s (E/%d/%d) has a cumulative GPA of %.2f\n",firstNameArray[0],lastNameArray[0],batchArray[0],regNoArray[0],gpaArray[0]);
 }
+
 // capitalize the first letter of the input string
 void capitalize(char* word) {
     int i=1;
