@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdbool.h>
 #define batchSize 420
 #define nameSize 69
 
@@ -86,7 +87,13 @@ void newRecord() {
 // print the recored corresponding to a given regNo
 void printRecord() {
     int index=findIndex();
-    printf("Student %s %s (E/%d/%d) has a cumulative GPA of %.2f\n",firstNameArray[index],lastNameArray[index],batchArray[index],regNoArray[index],gpaArray[index]);
+
+    if (index==-1) {
+        printf("Record does not exist\n");
+    }
+    else {
+        printf("Student %s %s (E/%d/%d) has a cumulative GPA of %.2f\n",firstNameArray[index],lastNameArray[index],batchArray[index],regNoArray[index],gpaArray[index]);
+    }
 }
 // capitalize the first letter of the input string
 void capitalize(char* word) {
@@ -103,7 +110,8 @@ int findIndex() {
     char query[9];
     int queryBatch;
     int queryRegNo;
-    int i=-1;
+    int i;
+    bool recordExists=0;
     printf("Enter registration number: ");
     scanf("%s",&query);
     // obtain batch and regNo from search query
@@ -114,11 +122,14 @@ int findIndex() {
     for (i=0; i<(batchSize)*4; i++) {
         
         if (regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
+            recordExists=1;
             break;
         }
     }
-    if (i=-1) {
-        // printf("No records of registration number ")
+    if (recordExists) {
+        return i;
     }
-    return i;
+    else {
+        return -1;
+    }
 }
