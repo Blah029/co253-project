@@ -7,17 +7,19 @@
 
 int mainMenu();
 void newRecord();
-void printRecord();
-void printAll();
+void printRecord(int recordIndex);
+void printAllRecords();
+void printDatabase(int limit); //for debugging purposes
 void deleteRecord();
+void deleteAllRecords();
 void capitalize(char* word);
 int findIndex();
 
-int batchArray[(batchSize)*4]={0};
-int regNoArray[(batchSize)*4]={0};
-char* firstNameArray[(batchSize)*4][nameSize]={0};
-char* lastNameArray[(batchSize)*4][nameSize]={0};
-float gpaArray[(batchSize)*4]={0};
+int batchArray[batchSize*4]={0};
+int regNoArray[batchSize*4]={0};
+char* firstNameArray[batchSize*4][nameSize]={0};
+char* lastNameArray[batchSize*4][nameSize]={0};
+float gpaArray[batchSize*4]={0};
 
 int main() {
     // demo record 1
@@ -29,22 +31,35 @@ int main() {
     // demo record 2
     batchArray[2]=17;
     regNoArray[2]=370;
-    memcpy(firstNameArray[2], "Lahiru", sizeof(firstNameArray[4]));
-    memcpy(lastNameArray[2], "Range", sizeof(firstNameArray[4]));
+    memcpy(firstNameArray[2], "Lahiru", sizeof(firstNameArray[2]));
+    memcpy(lastNameArray[2], "Range", sizeof(firstNameArray[2]));
     gpaArray[2]=3.8;
     // demo record 3
-    batchArray[11]=17;
-    regNoArray[11]=372;
-    memcpy(firstNameArray[11], "Vano", sizeof(firstNameArray[4]));
-    memcpy(lastNameArray[11], "Warna", sizeof(firstNameArray[4]));
-    gpaArray[11]=3.7;
-    // demo record 4
     batchArray[1]=17;
-    regNoArray[1]=374;
-    memcpy(firstNameArray[1], "Aveesha", sizeof(firstNameArray[4]));
-    memcpy(lastNameArray[1], "Upasaka", sizeof(firstNameArray[4]));
-    gpaArray[1]=3.6;
-    printRecord();
+    regNoArray[1]=372;
+    memcpy(firstNameArray[1], "Vano", sizeof(firstNameArray[1]));
+    memcpy(lastNameArray[1], "Warna", sizeof(firstNameArray[1]));
+    gpaArray[1]=3.7;
+    // demo record 4
+    batchArray[6]=17;
+    regNoArray[6]=374;
+    memcpy(firstNameArray[6], "Aveesha", sizeof(firstNameArray[6]));
+    memcpy(lastNameArray[6], "Upasaka", sizeof(firstNameArray[6]));
+    gpaArray[6]=3.6;
+    // demo record 5
+    batchArray[8]=1;
+    regNoArray[8]=1;
+    memcpy(firstNameArray[8], "A", sizeof(firstNameArray[8]));
+    memcpy(lastNameArray[8], "B", sizeof(firstNameArray[8]));
+    gpaArray[8]=1;
+    printf("\nInitial data\n");
+    printDatabase(10);
+    printf("\nDelete signle record\n");
+    deleteRecord(findIndex());
+    printDatabase(10);
+    printf("\nDelete all records\n");
+    deleteAllRecords();
+    printDatabase(10);
     return 0;
 }
 // generate a text-based main menu and return the selected option
@@ -62,7 +77,7 @@ void newRecord() {
     char lastName[nameSize];
     int i;
     // find the first empty record
-    for (i=0; i<(batchSize); i++) {
+    for (i=0; i<batchSize; i++) {
 
         if (batchArray[i]==0){
             break;
@@ -84,15 +99,63 @@ void newRecord() {
     memcpy(firstNameArray[i], firstName, sizeof(firstNameArray[i]));
     memcpy(lastNameArray[i], lastName, sizeof(firstNameArray[i]));
 }
-// print the recored corresponding to a given regNo
-void printRecord() {
-    int index=findIndex();
+// print the recored with given regNo
+void printRecord(int recordIndex) {
 
-    if (index==-1) {
+    if (recordIndex==-1) {
         printf("Record does not exist\n");
     }
     else {
-        printf("Student %s %s (E/%d/%d) has a cumulative GPA of %.2f\n",firstNameArray[index],lastNameArray[index],batchArray[index],regNoArray[index],gpaArray[index]);
+        printf("Student %s %s (E/%d/%d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
+    }
+}
+// print all existing records
+void printAllRecords() {
+    int i;
+
+    for (i=0; i<batchSize*4; i++) {
+        
+        if (batchArray[i]!=0) {
+            printRecord(i);
+        }
+    }
+}
+// print the whole database including empty records
+void printDatabase(int limit) {
+    int i;
+
+    for (i=0; i<limit; i++) {
+        printf("%d ",i);
+        printRecord(i);
+    }
+}
+// delete the record with given regNo
+void deleteRecord(int recordIndex) {
+
+    if (recordIndex==-1) {
+        printf("Record does not exist\n");
+    }
+    else {
+        int i;
+        batchArray[recordIndex]=0;
+        regNoArray[recordIndex]=0;
+        gpaArray[recordIndex]=0;
+
+        for (i=0; i<nameSize; i++) {
+            firstNameArray[recordIndex][i]=0;
+            lastNameArray[recordIndex][i]=0;
+        }
+    }    
+}
+// clear the database
+void deleteAllRecords() {
+    int i;
+
+    for (i=0; i<batchSize*4; i++) {
+        
+        if (batchArray[i]!=0) {
+            deleteRecord(i);
+        }
     }
 }
 // capitalize the first letter of the input string
@@ -119,7 +182,7 @@ int findIndex() {
     queryRegNo=(query[5]-48)*100+(query[6]-48)*10+(query[7]-48);
     
     // find idex of matching regNo and batch
-    for (i=0; i<(batchSize)*4; i++) {
+    for (i=0; i<batchSize*4; i++) {
         
         if (regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
             recordExists=1;
