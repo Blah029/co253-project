@@ -237,7 +237,7 @@ int findIndex() {
     // find idex of matching regNo and batch
     for (i=0; i<batchSize*4; i++) {
         
-        if (regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
+        if (((query[0]=='e') || (query[0]=='E')) && regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
             recordExists=1;
             break;
         }
