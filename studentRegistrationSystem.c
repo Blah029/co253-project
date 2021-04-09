@@ -106,11 +106,13 @@ void newRecord() {
     scanf("%d",regNoArray+i);
     clearInputBuffer();
     printf("Enter first name         : ");
-    scanf("%s",firstName);
-    clearInputBuffer();
+    //scanf("%s",firstName);
+    gets(firstName);      
+    //clearInputBuffer();
     printf("Enter last name          : ");
-    scanf("%s",lastName);
-    clearInputBuffer();
+    //scanf("%s",lastName);
+    gets(lastName);      
+    //clearInputBuffer();
     printf("Enter cumulative GPA     : ");
     scanf("%f",gpaArray+i);
     clearInputBuffer();
