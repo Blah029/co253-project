@@ -55,12 +55,10 @@ int main() {
 
             case 2:
                 printRecord(findIndex());
-                waitForUser();
                 break;
 
             case 3:
                 printAllRecords();
-                waitForUser();
                 break;
 
             case 4:
@@ -89,9 +87,14 @@ int mainMenu() {
 }
 // make a new student record
 void newRecord() {
+    int batch;
+    int regNo;
     char firstName[nameSize];
     char lastName[nameSize];
+    float gpa;
     int i;
+    int j;
+    bool recordExists=0;
     // find the first empty record
     for (i=0; i<batchSize; i++) {
 
@@ -99,26 +102,46 @@ void newRecord() {
             break;
         }
     }
+    // get student ID
     printf("Enter batch (14/15/16/17): ");
-    scanf("%d",batchArray+i);
+    scanf("%d",&batch);
     clearInputBuffer();
     printf("Enter registration number: ");
-    scanf("%d",regNoArray+i);
+    scanf("%d",&regNo);
     clearInputBuffer();
-    printf("Enter first name         : ");
-    scanf("%s",firstName);
-    clearInputBuffer();
-    printf("Enter last name          : ");
-    scanf("%s",lastName);
-    clearInputBuffer();
-    printf("Enter cumulative GPA     : ");
-    scanf("%f",gpaArray+i);
-    clearInputBuffer();
-    // capitalize firstName and lastName and store
-    capitalize(firstName);
-    capitalize(lastName);
-    memcpy(firstNameArray[i], firstName, sizeof(firstNameArray[i]));
-    memcpy(lastNameArray[i], lastName, sizeof(firstNameArray[i]));
+
+    // check for duplicate student ID
+    for (j=0; j<batchSize*4; j++) {
+        
+        if (regNoArray[j]==regNo && batchArray[j]==batch) {
+            recordExists=1;
+            break;
+        }
+    }
+    if (recordExists) {
+        printf("Duplicate student ID. Record already exists.\n");
+        waitForUser();
+    }
+    else {
+        // contunue collecting data
+        printf("Enter first name         : ");
+        scanf("%[^\n]s",firstName); // include everything except newline character in scanset
+        clearInputBuffer();
+        printf("Enter last name          : ");
+        scanf("%[^\n]s",lastName);
+        clearInputBuffer();
+        printf("Enter cumulative GPA     : ");
+        scanf("%f",&gpa);
+        clearInputBuffer();
+        // process and store data
+        batchArray[i]=batch;
+        regNoArray[i]=regNo;
+        capitalize(firstName);
+        capitalize(lastName);
+        memcpy(firstNameArray[i], firstName, sizeof(firstNameArray[i]));
+        memcpy(lastNameArray[i], lastName, sizeof(firstNameArray[i]));
+        gpaArray[i]=gpa;
+    }
 }
 // print the recored with given regNo
 void printRecord(int recordIndex) {
@@ -129,6 +152,7 @@ void printRecord(int recordIndex) {
     else {
         printf("Student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
     }
+    waitForUser();
 }
 // print all existing records
 void printAllRecords() {
@@ -141,6 +165,7 @@ void printAllRecords() {
             printf("E/%02d/%03d  -------  %.2f  ---------------  %s %s\n",batchArray[i],regNoArray[i],gpaArray[i],firstNameArray[i],lastNameArray[i]);
         }
     }
+    waitForUser();
 }
 // print the whole database including empty records
 void printDatabase(int limit) {
@@ -212,11 +237,24 @@ void deleteAllRecords() {
 }
 // capitalize the first letter of the input string
 void capitalize(char* word) {
-    int i=1;
-    word[0]=toupper(word[0]);
+    int i=0;
+    bool firstLetter=1;
 
-    while (word[i]!=0) {
-        word[i]=tolower(word[i]);
+    while (word[i]!='\0') {
+        if (word[i]==' ') {
+            // word[i]=toupper(word[i]);
+            firstLetter=1;
+        }
+        else {
+            if (firstLetter) {
+               //  firstLetter=1;
+               word[i]=toupper(word[i]);
+            }
+            else {
+                word[i]=tolower(word[i]);
+            }
+            firstLetter=0;
+        }
         i++;
     }
 }
