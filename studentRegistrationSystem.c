@@ -241,13 +241,13 @@ void capitalize(char* word) {
     bool firstLetter=1;
 
     while (word[i]!='\0') {
+
         if (word[i]==' ') {
-            // word[i]=toupper(word[i]);
             firstLetter=1;
         }
         else {
+            
             if (firstLetter) {
-               //  firstLetter=1;
                word[i]=toupper(word[i]);
             }
             else {
