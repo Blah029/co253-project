@@ -70,7 +70,7 @@ int main() {
                 break;
 
             default:
-                printf("Invalid selesction. Please select a valid option\n");
+                printf("Invalid selection. Please select a valid option\n");
         }
     }
     return 0;
