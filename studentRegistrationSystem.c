@@ -15,16 +15,16 @@ E/17/374 - Weeerasekara K.A
 #define batchSize 420
 #define nameSize 69
 
-// record management functions
+//record management functions
 int mainMenu();
 void newRecord();
 void printRecord(int recordIndex);
 void printAllRecords();
 void printDatabase(int limit); //for debugging purposes
 void deleteRecord();
-void deleteAllRecords(); // extra
+void deleteAllRecords(); //extra
 
-// misc functions
+//misc functions
 void capitalize(char* word);
 int findIndex();
 void clearInputBuffer();
@@ -55,12 +55,10 @@ int main() {
 
             case 2:
                 printRecord(findIndex());
-                waitForUser();
                 break;
 
             case 3:
                 printAllRecords();
-                waitForUser();
                 break;
 
             case 4:
@@ -77,7 +75,7 @@ int main() {
     }
     return 0;
 }
-// generate a text-based main menu and return the selected option
+//generate a text-based main menu and return the selected option
 int mainMenu() {
     int option;
     printf("\n--------------------------------------\nA VOLATILE STUDENT REGISTRATION SYSTEM\n--------------------------------------\n");
@@ -87,40 +85,65 @@ int mainMenu() {
     clearInputBuffer();
     return option;
 }
-// make a new student record
+//make a new student record
 void newRecord() {
+    int batch;
+    int regNo;
     char firstName[nameSize];
     char lastName[nameSize];
+    float gpa;
     int i;
-    // find the first empty record
+    int j;
+    bool recordExists=0;
+    //find the first empty record
     for (i=0; i<batchSize; i++) {
 
         if (batchArray[i]==0){
             break;
         }
     }
+    //get student ID
     printf("Enter batch (14/15/16/17): ");
-    scanf("%d",batchArray+i);
+    scanf("%d",&batch);
     clearInputBuffer();
     printf("Enter registration number: ");
-    scanf("%d",regNoArray+i);
+    scanf("%d",&regNo);
     clearInputBuffer();
-    printf("Enter first name         : ");
-    scanf("%s",firstName);
-    clearInputBuffer();
-    printf("Enter last name          : ");
-    scanf("%s",lastName);
-    clearInputBuffer();
-    printf("Enter cumulative GPA     : ");
-    scanf("%f",gpaArray+i);
-    clearInputBuffer();
-    // capitalize firstName and lastName and store
-    capitalize(firstName);
-    capitalize(lastName);
-    memcpy(firstNameArray[i], firstName, sizeof(firstNameArray[i]));
-    memcpy(lastNameArray[i], lastName, sizeof(firstNameArray[i]));
+
+    //check for duplicate student ID
+    for (j=0; j<batchSize*4; j++) {
+        
+        if (regNoArray[j]==regNo && batchArray[j]==batch) {
+            recordExists=1;
+            break;
+        }
+    }
+    if (recordExists) {
+        printf("Duplicate student ID. Record already exists.\n");
+        waitForUser();
+    }
+    else {
+        //contunue collecting data
+        printf("Enter first name         : ");
+        scanf("%[^\n]s",firstName); //include everything except newline character in scanset
+        clearInputBuffer();
+        printf("Enter last name          : ");
+        scanf("%[^\n]s",lastName);
+        clearInputBuffer();
+        printf("Enter cumulative GPA     : ");
+        scanf("%f",&gpa);
+        clearInputBuffer();
+        //process and store data
+        batchArray[i]=batch;
+        regNoArray[i]=regNo;
+        capitalize(firstName);
+        capitalize(lastName);
+        memcpy(firstNameArray[i], firstName, sizeof(firstNameArray[i]));
+        memcpy(lastNameArray[i], lastName, sizeof(firstNameArray[i]));
+        gpaArray[i]=gpa;
+    }
 }
-// print the recored with given regNo
+//print the recored with given regNo
 void printRecord(int recordIndex) {
 
     if (recordIndex==-1) {
@@ -129,8 +152,9 @@ void printRecord(int recordIndex) {
     else {
         printf("Student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
     }
+    waitForUser();
 }
-// print all existing records
+//print all existing records
 void printAllRecords() {
     int i;
     printf("Student ID    |    Cumulative GPA    |    Name\n--------------------------------------------------\n");
@@ -141,8 +165,9 @@ void printAllRecords() {
             printf("E/%02d/%03d  -------  %.2f  ---------------  %s %s\n",batchArray[i],regNoArray[i],gpaArray[i],firstNameArray[i],lastNameArray[i]);
         }
     }
+    waitForUser();
 }
-// print the whole database including empty records
+//print the whole database including empty records
 void printDatabase(int limit) {
     int i;
 
@@ -151,7 +176,7 @@ void printDatabase(int limit) {
         printRecord(i);
     }
 }
-// delete the record with given regNo
+//delete the record with given regNo
 void deleteRecord(int recordIndex) {
 
     if (recordIndex==-1) {
@@ -180,7 +205,7 @@ void deleteRecord(int recordIndex) {
         }
     }    
 }
-// clear the database
+//clear the database
 void deleteAllRecords() {
     char confirmDelete;
     printf("Are you sure you want to delete all records? (Y/N)\n>>> ");
@@ -210,19 +235,33 @@ void deleteAllRecords() {
         printf("Records not deleted\n");
     }
 }
-// capitalize the first letter of the input string
+//capitalize the first letter of the input string
 void capitalize(char* word) {
-    int i=1;
-    word[0]=toupper(word[0]);
+    int i=0;
+    bool firstLetter=1;
 
-    while (word[i]!=0) {
-        word[i]=tolower(word[i]);
+    while (word[i]!='\0') {
+
+        if (word[i]==' ') {
+            firstLetter=1;
+        }
+        else {
+            
+            if (firstLetter) {
+               word[i]=toupper(word[i]);
+            }
+            else {
+                word[i]=tolower(word[i]);
+            }
+            firstLetter=0;
+        }
         i++;
     }
 }
-// get query e no. and find corresponding array index
+//get query e no. and find corresponding array index
 int findIndex() {
     char query[9];
+    char queryFaculty;
     int queryBatch;
     int queryRegNo;
     int i;
@@ -230,14 +269,15 @@ int findIndex() {
     printf("Enter registration number: ");
     scanf("%s",&query);
     clearInputBuffer();
-    // obtain batch and regNo from search query
+    //obtain faculty, batch, and regNo from search query
+    queryFaculty=toupper(query[0]);
     queryBatch=(query[2]-48)*10+(query[3]-48);
     queryRegNo=(query[5]-48)*100+(query[6]-48)*10+(query[7]-48);
     
-    // find idex of matching regNo and batch
+    //find idex of matching regNo and batch
     for (i=0; i<batchSize*4; i++) {
         
-        if (regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
+        if (queryFaculty=='E' && regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
             recordExists=1;
             break;
         }
@@ -249,42 +289,42 @@ int findIndex() {
         return -1;
     }
 }
-// clear input buffer until newline character is encountered
+//clear input buffer until newline character is encountered
 void clearInputBuffer() {
     while ((getchar()) != '\n');
 }
-// wait for user to press enter before continuing
+//wait for user to press enter before continuing
 void waitForUser() {
     printf("Press ENTER to continue");
     getchar();
 }
-// creat example record entries for testing/debugging
+//creat example record entries for testing/debugging
 void generateDemoRecord() {
-    // demo record 1
+    //demo record 1
     batchArray[4]=17;
     regNoArray[4]=371;
     memcpy(firstNameArray[4], "Rasika", sizeof(firstNameArray[4]));
     memcpy(lastNameArray[4], "Warnakulasuriya", sizeof(firstNameArray[4]));
     gpaArray[4]=3.9;
-    // demo record 2
+    //demo record 2
     batchArray[2]=17;
     regNoArray[2]=370;
     memcpy(firstNameArray[2], "Lahiru", sizeof(firstNameArray[2]));
     memcpy(lastNameArray[2], "Range", sizeof(firstNameArray[2]));
     gpaArray[2]=3.8;
-    // demo record 3
+    //demo record 3
     batchArray[1]=17;
     regNoArray[1]=372;
     memcpy(firstNameArray[1], "Vano", sizeof(firstNameArray[1]));
     memcpy(lastNameArray[1], "Warna", sizeof(firstNameArray[1]));
     gpaArray[1]=3.7;
-    // demo record 4
+    //demo record 4
     batchArray[6]=17;
     regNoArray[6]=374;
     memcpy(firstNameArray[6], "Aveesha", sizeof(firstNameArray[6]));
     memcpy(lastNameArray[6], "Upasaka", sizeof(firstNameArray[6]));
     gpaArray[6]=3.6;
-    // demo record 5
+    //demo record 5
     batchArray[8]=1;
     regNoArray[8]=1;
     memcpy(firstNameArray[8], "A", sizeof(firstNameArray[8]));
