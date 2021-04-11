@@ -20,15 +20,12 @@ int mainMenu();
 void newRecord();
 void printRecord(int recordIndex);
 void printAllRecords();
-void printDatabase(int limit); //for debugging purposes
 void deleteRecord();
-void deleteAllRecords(); //extra
 
 //misc functions
 void capitalize(char* word);
 int findIndex();
 void clearInputBuffer();
-void waitForUser();
 void generateDemoRecord();
 
 int batchArray[batchSize*4]={0};
@@ -39,6 +36,8 @@ float gpaArray[batchSize*4]={0};
 
 int main() {
     generateDemoRecord();
+    printf("\n--------------------------------------\nA VOLATILE STUDENT REGISTRATION SYSTEM\n--------------------------------------\n");
+    printf("0. Quit\n1. Insert a student record\n2. Print a student record\n3. Print all student records\n4. Delete a student record\n");
     bool loop=1;
 
     while (loop) {
@@ -65,22 +64,17 @@ int main() {
                 deleteRecord(findIndex());
                 break;
 
-            case 5:
-                deleteAllRecords();
-                break;
-
             default:
                 printf("Invalid selesction. Please select a valid option\n");
         }
+        printf("\n");
     }
     return 0;
 }
 //generate a text-based main menu and return the selected option
 int mainMenu() {
     int option;
-    printf("\n--------------------------------------\nA VOLATILE STUDENT REGISTRATION SYSTEM\n--------------------------------------\n");
-    printf("0. Quit\n1. Insert a student record\n2. Print a student record\n3. Print all student records\n4. Delete a student record\n5. Delete all student records\n");
-    printf("------------------\nENTER OPTION [0-5]\n------------------\n>>> ");
+    printf("------------------\nENTER OPTION [0-4]\n------------------\n");
     scanf("%d",&option);
     clearInputBuffer();
     return option;
@@ -120,7 +114,6 @@ void newRecord() {
     }
     if (recordExists) {
         printf("Duplicate student ID. Record already exists.\n");
-        waitForUser();
     }
     else {
         //contunue collecting data
@@ -147,93 +140,41 @@ void newRecord() {
 void printRecord(int recordIndex) {
 
     if (recordIndex==-1) {
-        printf("Record does not exist\n");
+        printf("No student with the given registration number!\n");
     }
     else {
         printf("Student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
     }
-    waitForUser();
 }
 //print all existing records
 void printAllRecords() {
     int i;
-    printf("Student ID    |    Cumulative GPA    |    Name\n--------------------------------------------------\n");
-
+    
     for (i=0; i<batchSize*4; i++) {
 
         if (batchArray[i]!=0) {
-            printf("E/%02d/%03d  -------  %.2f  ---------------  %s %s\n",batchArray[i],regNoArray[i],gpaArray[i],firstNameArray[i],lastNameArray[i]);
+            printRecord(i);
         }
-    }
-    waitForUser();
-}
-//print the whole database including empty records
-void printDatabase(int limit) {
-    int i;
-
-    for (i=0; i<limit; i++) {
-        printf("%d ",i);
-        printRecord(i);
     }
 }
 //delete the record with given regNo
 void deleteRecord(int recordIndex) {
 
     if (recordIndex==-1) {
-        printf("Record does not exist\n");
+        printf("No student with the given registration number!\n");
     }
     else {
-        char confirmDelete;
-        printf("Are you sure you want to delete record of student %s %s? (Y/N)\n>>> ",firstNameArray[recordIndex],lastNameArray[recordIndex]);
-        scanf("%c",&confirmDelete);
-        clearInputBuffer();
-
-        if (toupper(confirmDelete)=='Y'){
-            int i;
-            batchArray[recordIndex]=0;
-            regNoArray[recordIndex]=0;
-            gpaArray[recordIndex]=0;
-
-            for (i=0; i<nameSize; i++) {
-                firstNameArray[recordIndex][i]=0;
-                lastNameArray[recordIndex][i]=0;
-            }
-            printf("Record deleted\n");
-        }
-        else {
-            printf("Record not deleted\n");
-        }
-    }    
-}
-//clear the database
-void deleteAllRecords() {
-    char confirmDelete;
-    printf("Are you sure you want to delete all records? (Y/N)\n>>> ");
-    scanf("%c",&confirmDelete);
-    clearInputBuffer();
-
-    if (toupper(confirmDelete)=='Y') {
         int i;
+        batchArray[recordIndex]=0;
+        regNoArray[recordIndex]=0;
+        gpaArray[recordIndex]=0;
 
-        for (i=0; i<batchSize*4; i++) {
-            
-            if (batchArray[i]!=0) {
-                int j;
-                batchArray[i]=0;
-                regNoArray[i]=0;
-                gpaArray[i]=0;
-
-                for (j=0; j<nameSize; j++) {
-                    firstNameArray[i][j]=0;
-                    lastNameArray[i][j]=0;
-                }
-            }
+        for (i=0; i<nameSize; i++) {
+            firstNameArray[recordIndex][i]=0;
+            lastNameArray[recordIndex][i]=0;
         }
-        printf("All records deleted\n");
-    }
-    else {
-        printf("Records not deleted\n");
-    }
+        printf("Delete successful!\n");
+    }    
 }
 //capitalize the first letter of the input string
 void capitalize(char* word) {
@@ -292,11 +233,6 @@ int findIndex() {
 //clear input buffer until newline character is encountered
 void clearInputBuffer() {
     while ((getchar()) != '\n');
-}
-//wait for user to press enter before continuing
-void waitForUser() {
-    printf("Press ENTER to continue");
-    getchar();
 }
 //creat example record entries for testing/debugging
 void generateDemoRecord() {
