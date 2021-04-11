@@ -261,6 +261,7 @@ void capitalize(char* word) {
 //get query e no. and find corresponding array index
 int findIndex() {
     char query[9];
+    char queryFaculty;
     int queryBatch;
     int queryRegNo;
     int i;
@@ -268,14 +269,15 @@ int findIndex() {
     printf("Enter registration number: ");
     scanf("%s",&query);
     clearInputBuffer();
-    //obtain batch and regNo from search query
+    //obtain faculty, batch, and regNo from search query
+    queryFaculty=toupper(query[0]);
     queryBatch=(query[2]-48)*10+(query[3]-48);
     queryRegNo=(query[5]-48)*100+(query[6]-48)*10+(query[7]-48);
     
     //find idex of matching regNo and batch
     for (i=0; i<batchSize*4; i++) {
         
-        if (regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
+        if (queryFaculty=='E' && regNoArray[i]==queryRegNo && batchArray[i]==queryBatch) {
             recordExists=1;
             break;
         }
