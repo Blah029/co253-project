@@ -35,7 +35,7 @@ char* lastNameArray[batchSize*4][nameSize]={0};
 float gpaArray[batchSize*4]={0};
 
 int main() {
-    generateDemoRecord();
+    // generateDemoRecord();
     printf("\n--------------------------------------\nA VOLATILE STUDENT REGISTRATION SYSTEM\n--------------------------------------\n");
     printf("0. Quit\n1. Insert a student record\n2. Print a student record\n3. Print all student records\n4. Delete a student record\n");
     bool loop=1;
@@ -65,7 +65,7 @@ int main() {
                 break;
 
             default:
-                printf("Invalid selesction. Please select a valid option\n");
+                printf("Invalid selection. Please select a valid option\n");
         }
         printf("\n");
     }
