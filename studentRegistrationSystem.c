@@ -20,7 +20,7 @@ int mainMenu();
 void newRecord();
 void printRecord(int recordIndex);
 void printAllRecords();
-void deleteRecord();
+void deleteRecord(int recordIndex);
 
 //misc functions
 void capitalize(char* word);
@@ -141,10 +141,7 @@ void newRecord() {
 //print the recored with given regNo
 void printRecord(int recordIndex) {
 
-    if (recordIndex==-1) {
-        printf("No student with the given Registration Number!\n");
-    }
-    else {
+    if (recordIndex!=-1) {
         printf("The student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
     }
 }
@@ -162,10 +159,7 @@ void printAllRecords() {
 //delete the record with given regNo
 void deleteRecord(int recordIndex) {
 
-    if (recordIndex==-1) {
-        printf("No student with the given Registration Number!\n");
-    }
-    else {
+    if (recordIndex!=-1) {
         int i;
         batchArray[recordIndex]=0;
         regNoArray[recordIndex]=0;
@@ -229,6 +223,7 @@ int findIndex() {
         return i;
     }
     else {
+        printf("No student with the given Registration Number!\n");
         return -1;
     }
 }
