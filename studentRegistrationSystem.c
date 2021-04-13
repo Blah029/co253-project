@@ -169,7 +169,7 @@ void deleteRecord(int recordIndex) {
             firstNameArray[recordIndex][i]=0;
             lastNameArray[recordIndex][i]=0;
         }
-        printf("Delete successful!\n");
+        printf("Delete Successful!\n");
     }    
 }
 //capitalize the first letter of the input string
