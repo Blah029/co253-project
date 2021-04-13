@@ -142,7 +142,7 @@ void newRecord() {
 void printRecord(int recordIndex) {
 
     if (recordIndex==-1) {
-        printf("No student with the given registration number!\n");
+        printf("No student with the given Registration Number!\n");
     }
     else {
         printf("The student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
@@ -163,7 +163,7 @@ void printAllRecords() {
 void deleteRecord(int recordIndex) {
 
     if (recordIndex==-1) {
-        printf("No student with the given registration number!\n");
+        printf("No student with the given Registration Number!\n");
     }
     else {
         int i;
@@ -209,7 +209,7 @@ int findIndex() {
     int queryRegNo;
     int i;
     bool recordExists=0;
-    printf("Enter registration number: ");
+    printf("Enter the Registration Number: ");
     scanf("%s",&query);
     clearInputBuffer();
     //obtain faculty, batch, and regNo from search query
