@@ -226,7 +226,7 @@ int findIndex() {
         return -1;
     }
 }
-//clear input buffer until newline character of end of file is encountered
+//clear input buffer until newline character or end of file is encountered
 void clearInputBuffer() {
     while (getchar() != '\n' && getchar() != EOF);
 }
