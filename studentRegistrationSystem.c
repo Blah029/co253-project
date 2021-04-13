@@ -36,8 +36,8 @@ float gpaArray[batchSize*4]={0};
 
 int main() {
     // generateDemoRecord();
-    printf("\n--------------------------------------\nA VOLATILE STUDENT REGISTRATION SYSTEM\n--------------------------------------\n");
-    printf("0. Quit\n1. Insert a student record\n2. Print a student record\n3. Print all student records\n4. Delete a student record\n");
+    printf("--------------------------------------------\nA VOLATILE STUDENT RECORD MAINTENANCE SYSTEM\n--------------------------------------------\n");
+    printf("0. Quit\n1. Insert a Student Record\n2. Print a Student Record\n3. Print all Student Records\n4. Delete a Student Record\n");
     bool loop=1;
 
     while (loop) {
@@ -65,9 +65,8 @@ int main() {
                 break;
 
             default:
-                printf("Invalid selection. Please select a valid option\n");
+                ;
         }
-        printf("\n");
     }
     return 0;
 }
