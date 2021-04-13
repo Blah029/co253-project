@@ -20,7 +20,7 @@ int mainMenu();
 void newRecord();
 void printRecord(int recordIndex);
 void printAllRecords();
-void deleteRecord();
+void deleteRecord(int recordIndex);
 
 //misc functions
 void capitalize(char* word);
@@ -36,8 +36,8 @@ float gpaArray[batchSize*4]={0};
 
 int main() {
     // generateDemoRecord();
-    printf("\n--------------------------------------\nA VOLATILE STUDENT REGISTRATION SYSTEM\n--------------------------------------\n");
-    printf("0. Quit\n1. Insert a student record\n2. Print a student record\n3. Print all student records\n4. Delete a student record\n");
+    printf("--------------------------------------------\nA VOLATILE STUDENT RECORD MAINTENANCE SYSTEM\n--------------------------------------------\n");
+    printf("0. Quit\n1. Insert a Student Record\n2. Print a Student Record\n3. Print all Student Records\n4. Delete a Student Record\n");
     bool loop=1;
 
     while (loop) {
@@ -50,24 +50,26 @@ int main() {
 
             case 1:
                 newRecord();
+                printf("\n");
                 break;
 
             case 2:
                 printRecord(findIndex());
+                printf("\n");
                 break;
 
             case 3:
                 printAllRecords();
+                printf("\n");
                 break;
 
             case 4:
                 deleteRecord(findIndex());
+                printf("\n");
                 break;
 
-            default:
-                printf("Invalid selection. Please select a valid option\n");
+            default:;
         }
-        printf("\n");
     }
     return 0;
 }
@@ -97,10 +99,10 @@ void newRecord() {
         }
     }
     //get student ID
-    printf("Enter batch (14/15/16/17): ");
+    printf("Enter the batch (14/15/16/17): ");
     scanf("%d",&batch);
     clearInputBuffer();
-    printf("Enter registration number: ");
+    printf("Enter the registration number: ");
     scanf("%d",&regNo);
     clearInputBuffer();
 
@@ -113,17 +115,17 @@ void newRecord() {
         }
     }
     if (recordExists) {
-        printf("Duplicate student ID. Record already exists.\n");
+        printf("Duplicate student ID. Record already exists.");
     }
     else {
         //contunue collecting data
-        printf("Enter first name         : ");
+        printf("Enter the first name         : ");
         scanf("%[^\n]s",firstName); //include everything except newline character in scanset
         clearInputBuffer();
-        printf("Enter last name          : ");
+        printf("Enter the last name          : ");
         scanf("%[^\n]s",lastName);
         clearInputBuffer();
-        printf("Enter cumulative GPA     : ");
+        printf("Enter the cumulative GPA     : ");
         scanf("%f",&gpa);
         clearInputBuffer();
         //process and store data
@@ -139,11 +141,8 @@ void newRecord() {
 //print the recored with given regNo
 void printRecord(int recordIndex) {
 
-    if (recordIndex==-1) {
-        printf("No student with the given registration number!\n");
-    }
-    else {
-        printf("Student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
+    if (recordIndex!=-1) {
+        printf("The student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
     }
 }
 //print all existing records
@@ -160,10 +159,7 @@ void printAllRecords() {
 //delete the record with given regNo
 void deleteRecord(int recordIndex) {
 
-    if (recordIndex==-1) {
-        printf("No student with the given registration number!\n");
-    }
-    else {
+    if (recordIndex!=-1) {
         int i;
         batchArray[recordIndex]=0;
         regNoArray[recordIndex]=0;
@@ -173,7 +169,7 @@ void deleteRecord(int recordIndex) {
             firstNameArray[recordIndex][i]=0;
             lastNameArray[recordIndex][i]=0;
         }
-        printf("Delete successful!\n");
+        printf("Delete Successful!\n");
     }    
 }
 //capitalize the first letter of the input string
@@ -207,7 +203,7 @@ int findIndex() {
     int queryRegNo;
     int i;
     bool recordExists=0;
-    printf("Enter registration number: ");
+    printf("Enter the Registration Number: ");
     scanf("%s",&query);
     clearInputBuffer();
     //obtain faculty, batch, and regNo from search query
@@ -227,12 +223,13 @@ int findIndex() {
         return i;
     }
     else {
+        printf("No student with the given Registration Number!\n");
         return -1;
     }
 }
 //clear input buffer until newline character is encountered
 void clearInputBuffer() {
-    while ((getchar()) != '\n');
+    while (getchar() != '\n' && getchar() != EOF);
 }
 //creat example record entries for testing/debugging
 void generateDemoRecord() {
