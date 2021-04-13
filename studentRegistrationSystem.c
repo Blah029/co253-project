@@ -50,22 +50,25 @@ int main() {
 
             case 1:
                 newRecord();
+                printf("\n");
                 break;
 
             case 2:
                 printRecord(findIndex());
+                printf("\n");
                 break;
 
             case 3:
                 printAllRecords();
+                printf("\n");
                 break;
 
             case 4:
                 deleteRecord(findIndex());
+                printf("\n");
                 break;
 
-            default:
-                ;
+            default:;
         }
     }
     return 0;
@@ -96,10 +99,10 @@ void newRecord() {
         }
     }
     //get student ID
-    printf("Enter batch (14/15/16/17): ");
+    printf("Enter the batch (14/15/16/17): ");
     scanf("%d",&batch);
     clearInputBuffer();
-    printf("Enter registration number: ");
+    printf("Enter the registration number: ");
     scanf("%d",&regNo);
     clearInputBuffer();
 
@@ -112,17 +115,17 @@ void newRecord() {
         }
     }
     if (recordExists) {
-        printf("Duplicate student ID. Record already exists.\n");
+        printf("Duplicate student ID. Record already exists.");
     }
     else {
         //contunue collecting data
-        printf("Enter first name         : ");
+        printf("Enter the first name         : ");
         scanf("%[^\n]s",firstName); //include everything except newline character in scanset
         clearInputBuffer();
-        printf("Enter last name          : ");
+        printf("Enter the last name          : ");
         scanf("%[^\n]s",lastName);
         clearInputBuffer();
-        printf("Enter cumulative GPA     : ");
+        printf("Enter the cumulative GPA     : ");
         scanf("%f",&gpa);
         clearInputBuffer();
         //process and store data
@@ -142,7 +145,7 @@ void printRecord(int recordIndex) {
         printf("No student with the given registration number!\n");
     }
     else {
-        printf("Student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
+        printf("The student %s %s (E/%02d/%03d) has a cumulative GPA of %.2f\n",firstNameArray[recordIndex],lastNameArray[recordIndex],batchArray[recordIndex],regNoArray[recordIndex],gpaArray[recordIndex]);
     }
 }
 //print all existing records
