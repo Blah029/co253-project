@@ -26,7 +26,6 @@ void deleteRecord(int recordIndex);
 void capitalize(char* word);
 int findIndex();
 void clearInputBuffer();
-void generateDemoRecord();
 
 int batchArray[batchSize*4]={0};
 int regNoArray[batchSize*4]={0};
@@ -35,7 +34,6 @@ char* lastNameArray[batchSize*4][nameSize]={0};
 float gpaArray[batchSize*4]={0};
 
 int main() {
-    // generateDemoRecord();
     printf("--------------------------------------------\nA VOLATILE STUDENT RECORD MAINTENANCE SYSTEM\n--------------------------------------------\n");
     printf("0. Quit\n1. Insert a Student Record\n2. Print a Student Record\n3. Print all Student Records\n4. Delete a Student Record\n");
     bool loop=1;
@@ -91,6 +89,7 @@ void newRecord() {
     int i;
     int j;
     bool recordExists=0;
+
     //find the first empty record
     for (i=0; i<batchSize; i++) {
 
@@ -227,40 +226,7 @@ int findIndex() {
         return -1;
     }
 }
-//clear input buffer until newline character is encountered
+//clear input buffer until newline character of end of file is encountered
 void clearInputBuffer() {
     while (getchar() != '\n' && getchar() != EOF);
-}
-//creat example record entries for testing/debugging
-void generateDemoRecord() {
-    //demo record 1
-    batchArray[4]=17;
-    regNoArray[4]=371;
-    memcpy(firstNameArray[4], "Rasika", sizeof(firstNameArray[4]));
-    memcpy(lastNameArray[4], "Warnakulasuriya", sizeof(firstNameArray[4]));
-    gpaArray[4]=3.9;
-    //demo record 2
-    batchArray[2]=17;
-    regNoArray[2]=370;
-    memcpy(firstNameArray[2], "Lahiru", sizeof(firstNameArray[2]));
-    memcpy(lastNameArray[2], "Range", sizeof(firstNameArray[2]));
-    gpaArray[2]=3.8;
-    //demo record 3
-    batchArray[1]=17;
-    regNoArray[1]=372;
-    memcpy(firstNameArray[1], "Vano", sizeof(firstNameArray[1]));
-    memcpy(lastNameArray[1], "Warna", sizeof(firstNameArray[1]));
-    gpaArray[1]=3.7;
-    //demo record 4
-    batchArray[6]=17;
-    regNoArray[6]=374;
-    memcpy(firstNameArray[6], "Aveesha", sizeof(firstNameArray[6]));
-    memcpy(lastNameArray[6], "Upasaka", sizeof(firstNameArray[6]));
-    gpaArray[6]=3.6;
-    //demo record 5
-    batchArray[8]=1;
-    regNoArray[8]=1;
-    memcpy(firstNameArray[8], "A", sizeof(firstNameArray[8]));
-    memcpy(lastNameArray[8], "B", sizeof(firstNameArray[8]));
-    gpaArray[8]=1;
 }
