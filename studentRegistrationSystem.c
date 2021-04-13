@@ -234,7 +234,8 @@ int findIndex() {
 }
 //clear input buffer until newline character is encountered
 void clearInputBuffer() {
-    while ((getchar()) != '\n');
+    int i;
+    while ((i = getchar()) != '\n' && i != EOF);
 }
 //creat example record entries for testing/debugging
 void generateDemoRecord() {
