@@ -1,5 +1,5 @@
 # co253Project
-2nd year CO253 project
+2nd year CO253: Introduction to Programming and Networking for Electrical Engineers project
 - Due date
   - 24/04/2021
 - Group members
